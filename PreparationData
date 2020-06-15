@@ -1,0 +1,141 @@
+Extracts from the CMD line whilst I was building the solution
+
+Microsoft Windows [Version 10.0.18362.207]
+(c) 2019 Microsoft Corporation. All rights reserved.
+
+C:\Users\radfi>color 26
+
+C:\Users\radfi>color 27
+
+C:\Users\radfi>psql -U postgres -p5432
+Password for user postgres:
+psql (10.11)
+WARNING: Console code page (437) differs from Windows code page (1252)
+         8-bit characters might not work correctly. See psql reference
+         page "Notes for Windows users" for details.
+Type "help" for help.
+
+postgres=# create database ttse_stocks;
+CREATE DATABASE
+postgres=# \c
+You are now connected to database "postgres" as user "postgres".
+postgres=# \c ttse_stocks;
+You are now connected to database "ttse_stocks" as user "postgres".
+
+ttse_stocks=# create table angostura_stock_data
+ttse_stocks-# ( stock_date date ,
+ttse_stocks(# closing_quote money,
+ttse_stocks(# change_value money,
+ttse_stocks(# change_pct decimal,
+ttse_stocks(# volume_traded integer);
+
+CREATE TABLE
+
+ttse_stocks=# \copy angostura_stock_data from 'C:\Databases\PostgreSQL\TTSE_local_data\AngosturaHoldings2006_2020.csv' CSV HEADER ;
+# ------------------data cleansing required as download had foramtting issue that prevented upload into PostgreSQL server-----------
+
+ERROR:  invalid input syntax for integer: "3,450"
+CONTEXT:  COPY angostura_stock_data, line 3, column volume_traded: "3,450"
+ttse_stocks=# \copy angostura_stock_data from 'C:\Databases\PostgreSQL\TTSE_local_data\AngosturaHoldings2006_2020.csv' CSV HEADER ;
+ERROR:  invalid input syntax for integer: "3,450"
+CONTEXT:  COPY angostura_stock_data, line 3, column volume_traded: "3,450"
+
+
+# Solution - fixed problem by formating the number to remove comma(', ') delimeter
+# -----------------------------------------------------------------------------------------------------------------------------------
+ttse_stocks=# \copy angostura_stock_data from 'C:\Databases\PostgreSQL\TTSE_local_data\AngosturaHoldings2006_2020.csv' CSV HEADER ;
+COPY 3719
+
+ttse_stocks=# select * from angostura_stock_data ;
+
+# ran test SELECT script:
+
+ stock_date | closing_quote | change_value | change_pct | volume_traded
+------------+---------------+--------------+------------+---------------
+ 2006-06-05 |         $5.53 |        $0.00 |          0 |             0
+ 2006-06-06 |         $5.52 |      ($0.01) |      -0.18 |          3450
+ 2006-06-07 |         $5.52 |        $0.00 |          0 |             0
+ 2006-06-08 |         $5.52 |        $0.00 |          0 |             0
+ 2006-06-09 |         $5.52 |        $0.00 |          0 |             0
+ 2006-06-10 |         $5.52 |        $0.00 |          0 |             0
+ 2006-06-11 |         $5.52 |        $0.00 |          0 |             0
+ 2006-06-12 |         $5.52 |        $0.00 |          0 |             0
+ 2006-06-13 |         $5.52 |        $0.00 |          0 |             0
+ 2006-06-14 |         $5.52 |        $0.00 |          0 |             0
+ 2006-06-15 |         $5.52 |        $0.00 |          0 |             0
+ 2006-06-16 |         $5.52 |        $0.00 |          0 |             0
+ 2006-06-17 |         $5.52 |        $0.00 |          0 |             0
+ 2006-06-18 |         $5.52 |        $0.00 |          0 |             0
+ 2006-06-19 |         $5.52 |        $0.00 |          0 |             0
+ 2006-06-20 |         $5.43 |      ($0.09) |      -1.63 |           276
+ 2006-06-21 |         $5.43 |        $0.00 |          0 |             0
+ 2006-06-22 |         $5.43 |        $0.00 |          0 |             0
+ 2006-06-23 |         $5.43 |        $0.00 |          0 |             0
+ 2006-06-24 |         $5.43 |        $0.00 |          0 |             0
+ 2006-06-25 |         $5.43 |        $0.00 |          0 |             0
+ 2006-06-26 |         $5.43 |        $0.00 |          0 |             0
+ 2006-06-27 |         $5.42 |      ($0.01) |      -0.18 |           400
+ 2006-06-28 |         $5.42 |        $0.00 |          0 |             0
+ 2006-06-29 |         $5.42 |        $0.00 |          0 |             0
+ 2006-06-30 |         $5.42 |        $0.00 |          0 |             0
+ 2006-07-01 |         $5.42 |        $0.00 |          0 |             0
+ 2006-07-02 |         $5.42 |        $0.00 |          0 |             0
+ 2006-07-03 |         $5.42 |        $0.00 |          0 |             0
+ 2006-07-04 |         $5.20 |      ($0.22) |      -4.06 |           956
+ 2006-07-05 |         $5.00 |      ($0.20) |      -3.85 |          6240
+ 2006-07-06 |         $5.00 |        $0.00 |          0 |             0
+ 2006-07-07 |         $5.00 |        $0.00 |          0 |             0
+ 2006-07-08 |         $5.00 |        $0.00 |          0 |             0
+ 2006-07-09 |         $5.00 |        $0.00 |          0 |             0
+ 2006-07-10 |         $5.00 |        $0.00 |          0 |             0
+ 2006-07-11 |         $4.80 |      ($0.20) |         -4 |          3600
+ 2006-07-12 |         $4.80 |        $0.00 |          0 |          7238
+ 2006-07-13 |         $4.80 |        $0.00 |          0 |             0
+ 2006-07-14 |         $4.80 |        $0.00 |          0 |         22608
+ 2006-07-15 |         $4.80 |        $0.00 |          0 |             0
+ 2006-07-16 |         $4.80 |        $0.00 |          0 |             0
+ 2006-07-17 |         $4.80 |        $0.00 |          0 |             0
+ 2006-07-18 |         $4.80 |        $0.00 |          0 |          2027
+ 2006-07-19 |         $4.80 |        $0.00 |          0 |          1000
+ 2006-07-20 |         $4.80 |        $0.00 |          0 |             0
+ 2006-07-21 |         $4.80 |        $0.00 |          0 |          2358
+ttse_stocks=#
+ttse_stocks=#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
