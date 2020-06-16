@@ -7,3 +7,5 @@ The tools used to conduct the anlysis fall under:
 * Python 3.x
 * PostgreSQL
 * R programming Language(optional)
+
+T&T Stock Exchange:   https://www.stockex.co.tt/controller.php?action=market_report
